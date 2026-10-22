@@ -55,5 +55,6 @@ npm run build
 - `app/[slug]/page.tsx` — individual tool pages and metadata
 - `app/globals.css` — responsive design and visual effects
 - `components/tool-experience.tsx` — interactive client-side tool UI
+- `components/tool-search.tsx` — working client-side tool search
 - `lib/tools.ts` — central tool registry
 - `app/sitemap.ts` and `app/robots.ts` — crawl guidance

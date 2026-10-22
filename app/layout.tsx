@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Monitor, Github, Search } from "lucide-react";
+import { Monitor } from "lucide-react";
+import { ToolSearch } from "@/components/tool-search";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -33,8 +34,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <Link href="/static-screen">Effects</Link>
               <Link href="/countdown-timer">Timers</Link>
               <Link href="/fake-windows-11-update">Fake Screens</Link>
+              <Link href="/guides">Guides</Link>
             </nav>
-            <Link href="/#all-tools" className="header-search"><Search size={17} /><span>Explore tools</span></Link>
+            <ToolSearch />
           </div>
         </header>
         {children}
@@ -50,6 +52,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <Link href="/terms">Terms</Link>
               <Link href="/disclaimer">Disclaimer</Link>
               <Link href="/contact">Contact</Link>
+              <Link href="/feedback">Feedback</Link>
             </div>
             <p className="copyright">© {new Date().getFullYear()} ScreenTools. Free browser utilities.</p>
           </div>
