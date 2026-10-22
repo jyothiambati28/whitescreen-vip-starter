@@ -1,51 +1,76 @@
-export type Tool = { title: string; slug: string; description: string; category: string; color?: string; icon?: string; mode?: string };
-const colors = [
-  ["White Screen","white-screen","#ffffff","A clean white screen for lighting and display checks."],
-  ["Black Screen","black-screen","#000000","Display a black screen to check dark-room uniformity."],
-  ["Red Screen","red-screen","#ff0000","Show solid red across your display."],
-  ["Green Screen","green-screen","#00e000","Show solid green across your display."],
-  ["Blue Screen","blue-screen","#0000ff","Show solid blue across your display."],
-  ["Yellow Screen","yellow-screen","#ffff00","Show solid yellow across your display."],
-  ["Orange Screen","orange-screen","#ff8500","Show solid orange across your display."],
-  ["Pink Screen","pink-screen","#ff62b0","Show solid pink across your display."],
-  ["Purple Screen","purple-screen","#8000ff","Show solid purple across your display."],
-  ["Cyan Screen","cyan-screen","#00e5ee","Show solid cyan across your display."],
-  ["Magenta Screen","magenta-screen","#ff00d4","Show solid magenta across your display."],
-  ["Gray Screen","gray-screen","#808080","Show neutral gray for display inspection."],
-  ["Bright White Screen","bright-white-screen","#ffffff","A bright white page for visual inspection. Brightness depends on your device settings."]
-] as const;
-export const tools: Tool[] = [
- ...colors.map(([title,slug,color,description])=>({title,slug,color,description,category:"Screen Tests",icon:"◉",mode:"color"})),
- {title:"White Screen Image",slug:"white-screen-image",description:"Create and download a plain white PNG image.",category:"Screen Tests",icon:"▧",mode:"image"},
- {title:"Dead Pixel Test",slug:"dead-pixel-test",description:"Cycle solid colours and visually inspect for stuck or dead pixels.",category:"Screen Tests",icon:"⊞",mode:"pixel"},
- {title:"Screen Uniformity Test",slug:"screen-uniformity-test",description:"Use solid colours and gray tones to inspect display uniformity.",category:"Screen Tests",icon:"▦",mode:"uniformity"},
- {title:"Monitor Test",slug:"monitor-test",description:"Review colour, contrast, gradients and sharpness with browser patterns.",category:"Screen Tests",icon:"▣",mode:"monitor"},
- {title:"OLED Gray Test",slug:"oled-gray-test",description:"Display gray levels for visual inspection of dark-screen uniformity.",category:"Screen Tests",icon:"◐",mode:"oled"},
- {title:"OLED Burn-in Test",slug:"oled-burn-in-test",description:"Show test patterns to help visually inspect your display.",category:"Screen Tests",icon:"◒",mode:"oled"},
- {title:"Screen Color Test",slug:"screen-color-test",description:"Cycle through solid colours and inspect them visually.",category:"Screen Tests",icon:"🎨",mode:"color-test"},
- {title:"Screen Resolution Test",slug:"screen-resolution-test",description:"View viewport size and device pixel ratio.",category:"Screen Tests",icon:"↗",mode:"resolution"},
- {title:"Static Screen",slug:"static-screen",description:"Animated TV-style static effect.",category:"Effects",icon:"▧",mode:"static"},
- {title:"No Signal Screen",slug:"no-signal-screen",description:"A stylized no-signal screen simulation.",category:"Effects",icon:"📺",mode:"nosignal"},
- {title:"Matrix Screensaver",slug:"matrix-screensaver",description:"Green falling-code-inspired visual effect.",category:"Effects",icon:"⌘",mode:"matrix"},
- {title:"Flip Clock Screensaver",slug:"flip-clock-screensaver",description:"A live digital clock display.",category:"Effects",icon:"◷",mode:"clock"},
- {title:"Countdown Timer",slug:"countdown-timer",description:"Set a countdown timer in minutes and seconds.",category:"Effects",icon:"⏳",mode:"countdown"},
- {title:"Stopwatch",slug:"stopwatch",description:"A working stopwatch with start, pause and reset.",category:"Effects",icon:"⏱",mode:"stopwatch"},
- {title:"White Noise Screen",slug:"white-noise-screen",description:"Animated visual noise effect.",category:"Effects",icon:"▦",mode:"noise"},
- {title:"Brown Noise Screen",slug:"brown-noise-screen",description:"A visual brown-noise-inspired effect.",category:"Effects",icon:"▧",mode:"noise"},
- {title:"Pink Noise Screen",slug:"pink-noise-screen",description:"A visual pink-noise-inspired effect.",category:"Effects",icon:"▨",mode:"noise"},
- {title:"Broken Screen",slug:"broken-screen",description:"A decorative cracked-screen effect for entertainment.",category:"Effects",icon:"◇",mode:"broken"},
- {title:"Hacker Typer",slug:"hacker-typer",description:"Type on your keyboard to generate pretend terminal code.",category:"Effects",icon:"⌨",mode:"hacker"},
- {title:"DVD Screensaver",slug:"dvd-screensaver",description:"A bouncing DVD-style rectangle animation.",category:"Effects",icon:"▱",mode:"dvd"},
- {title:"Snow Screen",slug:"snow-screen",description:"A gentle animated snow effect.",category:"Effects",icon:"❄",mode:"snow"},
- {title:"Visual Noise",slug:"visual-noise",description:"A simple animated visual texture.",category:"Effects",icon:"▦",mode:"noise"},
- {title:"Color Cycle",slug:"color-cycle",description:"Cycle smoothly through screen colours.",category:"Effects",icon:"🌈",mode:"cycle"},
- {title:"Gradient Screen",slug:"gradient-screen",description:"Display a colour gradient test pattern.",category:"Effects",icon:"◩",mode:"gradient"},
- ...[
- ["Fake Windows 10 Update","fake-windows-10-update"],["Fake Windows 11 Update","fake-windows-11-update"],["Fake Mac Update","fake-mac-update"],["Fake Android Update","fake-android-update"],["Fake Windows XP Update","fake-windows-xp-update"],["Fake Windows XP Boot","fake-windows-xp-boot"],["Fake Chrome OS Update","fake-chrome-os-update"],["Fake Ubuntu Update","fake-ubuntu-update"],["Fake Video Call","fake-video-call"],["Fake Zoom Call","fake-zoom-call"],["Fake Teams Call","fake-teams-call"],["Fake Slack Huddle","fake-slack-huddle"]
- ].map(([title,slug])=>({title,slug,description:"A clearly labeled fictional screen simulation for entertainment only.",category:"Fake Screens",icon:"▣",mode:"fake"} as Tool)),
- ...[
- ["About","about"],["Contact","contact"],["Privacy Policy","privacy"],["Terms of Use","terms"],["Disclaimer","disclaimer"],["Feedback","feedback"],["Guides","guides"]
- ].map(([title,slug])=>({title,slug,description:`Learn more about ${title.toLowerCase()} on WhiteScreen.vip.`,category:"Guides",icon:"ⓘ",mode:"content"} as Tool))
+export type ToolCategory = "Screen Tests" | "Effects & Screensavers" | "Timers & Utilities" | "Fake Screens";
+
+export type Tool = {
+  slug: string;
+  title: string;
+  description: string;
+  category: ToolCategory;
+  kind: "color" | "test" | "timer" | "stopwatch" | "effect" | "simulation" | "image";
+  color?: string;
+  popular?: boolean;
+  details: string;
+};
+
+const rawTools: Tool[] = [
+  { slug: "white-screen", title: "White Screen", description: "Display a clean white screen to check brightness, dust, and screen uniformity.", category: "Screen Tests", kind: "color", color: "#ffffff", popular: true, details: "A full white screen can help you spot visible dust, smudges, uneven brightness, and differences in display tint. Clean your display gently before testing." },
+  { slug: "black-screen", title: "Black Screen", description: "Show a full black screen to inspect dark-room glow and pixels.", category: "Screen Tests", kind: "color", color: "#000000", popular: true, details: "A black screen is useful for viewing dark-room glow and checking whether pixels appear lit when they should be dark. Results vary by display technology and brightness settings." },
+  { slug: "red-screen", title: "Red Screen", description: "Display solid red to inspect colour pixels and screen uniformity.", category: "Screen Tests", kind: "color", color: "#ff0000", popular: true, details: "Use this solid red field to inspect visible colour inconsistencies and pixels that look different from the surrounding area." },
+  { slug: "green-screen", title: "Green Screen", description: "Display solid green across your screen.", category: "Screen Tests", kind: "color", color: "#00c853", popular: true, details: "A solid green field can make some pixel and colour irregularities easier to see. View the screen from a normal distance and avoid staring at high brightness." },
+  { slug: "blue-screen", title: "Blue Screen", description: "Display solid blue for a simple colour and pixel check.", category: "Screen Tests", kind: "color", color: "#075bff", popular: true, details: "A solid blue field helps you visually inspect the display for obvious colour inconsistencies and pixel anomalies." },
+  { slug: "yellow-screen", title: "Yellow Screen", description: "Fill your display with a bright yellow colour field.", category: "Screen Tests", kind: "color", color: "#ffe600", details: "Yellow is one of several primary test colours that can help reveal visible display uniformity issues." },
+  { slug: "orange-screen", title: "Orange Screen", description: "Display a solid orange screen for visual inspection.", category: "Screen Tests", kind: "color", color: "#ff7900", details: "Use orange as an additional colour field when comparing how evenly your display renders different colours." },
+  { slug: "pink-screen", title: "Pink Screen", description: "Display a solid pink screen.", category: "Screen Tests", kind: "color", color: "#ff5bbd", details: "A pink field provides another simple colour for checking visible tint and uniformity." },
+  { slug: "purple-screen", title: "Purple Screen", description: "Display a solid purple screen for display checks.", category: "Screen Tests", kind: "color", color: "#8b35ff", details: "Compare purple with other solid colours to check for visible tint or patchiness." },
+  { slug: "cyan-screen", title: "Cyan Screen", description: "Display a bright cyan test colour.", category: "Screen Tests", kind: "color", color: "#00e5ff", details: "A cyan field is useful as part of a broader visual check across several colours." },
+  { slug: "magenta-screen", title: "Magenta Screen", description: "Display a solid magenta test colour.", category: "Screen Tests", kind: "color", color: "#ff00c8", details: "Use magenta with red, green, blue, cyan, yellow, and white fields for a simple visual display check." },
+  { slug: "gray-screen", title: "Gray Screen", description: "Show a neutral gray field to inspect gradients and uniformity.", category: "Screen Tests", kind: "color", color: "#808080", details: "Gray fields can make some uniformity issues easier to notice, especially when viewed in a dim room. This is a visual aid, not a calibrated measurement." },
+  { slug: "bright-white-screen", title: "Bright White Screen", description: "Show a bright white field for a quick brightness and dust check.", category: "Screen Tests", kind: "color", color: "#ffffff", details: "Set your display brightness to a comfortable level. A bright white field can help reveal dust and smudges, but avoid prolonged viewing at maximum brightness." },
+  { slug: "white-screen-image", title: "White Screen Image", description: "Display white and save a white image for offline use.", category: "Screen Tests", kind: "image", color: "#ffffff", details: "You can download a plain white PNG image for offline display checks or use the fullscreen view directly in your browser." },
+  { slug: "dead-pixel-test", title: "Dead Pixel Test", description: "Cycle through solid colours to help visually inspect pixels.", category: "Screen Tests", kind: "test", details: "Move through red, green, blue, white, and black backgrounds and look for a pixel that remains visibly different. This tool cannot automatically detect or diagnose dead pixels." },
+  { slug: "screen-uniformity-test", title: "Screen Uniformity Test", description: "Compare solid colours and gray fields to inspect display uniformity.", category: "Screen Tests", kind: "test", details: "Use a series of solid colours and gray backgrounds to look for obvious patches, tint differences, or uneven brightness. Room lighting and viewing angle can affect what you see." },
+  { slug: "monitor-test", title: "Monitor Test", description: "Run a practical visual check using colour and grayscale screens.", category: "Screen Tests", kind: "test", details: "This collection of colour fields is a basic visual aid. It does not replace professional calibration equipment or a manufacturer's diagnostic test." },
+  { slug: "oled-gray-test", title: "OLED Gray Test", description: "Display gray shades to inspect visible OLED uniformity.", category: "Screen Tests", kind: "test", details: "Gray fields can help you visually inspect low-level uniformity on OLED displays. Keep brightness comfortable and avoid leaving static patterns displayed for long periods." },
+  { slug: "oled-burn-in-test", title: "OLED Burn-in Check", description: "Use colour fields to look for possible persistent image retention.", category: "Screen Tests", kind: "test", details: "This page provides visual fields that may help you notice uneven wear or image retention. It cannot confirm burn-in; consult your display manufacturer if you are concerned." },
+  { slug: "screen-color-test", title: "Screen Color Test", description: "Cycle through a range of colours for a visual display check.", category: "Screen Tests", kind: "test", details: "Compare primary and secondary colours and look for obvious tint or uniformity differences. Browser and display settings affect the appearance." },
+  { slug: "screen-resolution-test", title: "Screen Resolution Test", description: "View your current screen dimensions and browser viewport.", category: "Screen Tests", kind: "test", details: "The dimensions shown are reported by your browser and may differ from the physical panel's native resolution or device pixel ratio." },
+
+  { slug: "static-screen", title: "Static Screen", description: "Display animated static-style noise as a visual effect.", category: "Effects & Screensavers", kind: "effect", details: "This animated visual effect creates a television-static-inspired pattern using CSS. It is decorative and does not represent an actual signal measurement." },
+  { slug: "no-signal-screen", title: "No Signal Screen", description: "Show a simulated no-signal display screen.", category: "Effects & Screensavers", kind: "simulation", details: "A decorative no-signal screen for demos and harmless visual effects. It is only a simulation and does not indicate a real device fault." },
+  { slug: "matrix-screensaver", title: "Matrix Screensaver", description: "Watch a green falling-character inspired screensaver.", category: "Effects & Screensavers", kind: "effect", details: "A lightweight animated falling-code-inspired effect runs in your browser. It is a visual screensaver, not a terminal or hacking tool." },
+  { slug: "flip-clock-screensaver", title: "Flip Clock Screensaver", description: "Display a large digital clock and current time.", category: "Effects & Screensavers", kind: "effect", details: "The clock uses your device's local time. Keep this tab open while using it as a simple desk or room display." },
+  { slug: "countdown-timer", title: "Countdown Timer", description: "Set a countdown, choose a preset, and use fullscreen mode.", category: "Timers & Utilities", kind: "timer", popular: true, details: "Set a duration, start the timer, pause or reset it, and optionally switch to fullscreen. Keep this tab open for the timer to remain visible." },
+  { slug: "stopwatch", title: "Stopwatch", description: "Measure elapsed time with start, pause, reset, and lap controls.", category: "Timers & Utilities", kind: "stopwatch", popular: true, details: "Use the stopwatch for study sessions, workouts, presentations, or everyday timing. Timing is based on the browser's high-resolution clock." },
+  { slug: "white-noise-screen", title: "White Noise Screen", description: "Show a soft animated white-noise-inspired visual.", category: "Effects & Screensavers", kind: "effect", details: "This page displays a visual noise effect only; it does not play audio." },
+  { slug: "brown-noise-screen", title: "Brown Noise Screen", description: "Display a warm-toned animated noise effect.", category: "Effects & Screensavers", kind: "effect", details: "This is a visual effect inspired by brown noise. No sound is generated." },
+  { slug: "pink-noise-screen", title: "Pink Noise Screen", description: "Display a soft pink animated noise effect.", category: "Effects & Screensavers", kind: "effect", details: "This is a visual noise-inspired effect only and does not generate audio." },
+  { slug: "broken-screen", title: "Broken Screen", description: "Show a clearly simulated cracked-screen visual.", category: "Effects & Screensavers", kind: "simulation", details: "A harmless decorative cracked-screen simulation for jokes and demos. It does not damage or change your device." },
+  { slug: "hacker-typer", title: "Hacker Typer", description: "Type keys to create a fictional code-screen effect.", category: "Effects & Screensavers", kind: "effect", details: "This is a fictional typing animation for entertainment. It does not access systems, run commands, or perform hacking." },
+  { slug: "dvd-screensaver", title: "DVD Screensaver", description: "Watch a bouncing logo-inspired screensaver.", category: "Effects & Screensavers", kind: "effect", details: "A simple bouncing rectangle animation inspired by classic screensavers. It is not affiliated with any media brand." },
+  { slug: "custom-dvd-screensaver", title: "Custom Bouncing Screensaver", description: "Choose a colour for a bouncing screensaver shape.", category: "Effects & Screensavers", kind: "effect", details: "Customize the shape colour and enjoy a simple bouncing animation in the browser." },
+  { slug: "zoom-lighting", title: "Zoom Lighting", description: "Use a soft colour panel as a lighting aid for video calls.", category: "Effects & Screensavers", kind: "effect", details: "This browser-based colour panel can act as a basic ambient lighting aid. It cannot control your camera or video-call software." },
+  { slug: "snow-screen", title: "Snow Screen", description: "Display gently falling animated snow.", category: "Effects & Screensavers", kind: "effect", details: "A decorative snowfall animation for your screen. Use the motion controls or reduced-motion settings if needed." },
+  { slug: "visual-noise", title: "Visual Noise", description: "View an animated noise texture.", category: "Effects & Screensavers", kind: "effect", details: "This is a decorative visual texture generated in the browser." },
+  { slug: "color-cycle", title: "Color Cycle", description: "Cycle through a range of full-screen colours.", category: "Effects & Screensavers", kind: "effect", details: "The screen cycles through solid colours at a gentle pace. Stop the effect at any time using the controls." },
+  { slug: "gradient-screen", title: "Gradient Screen", description: "Display a colourful gradient background.", category: "Effects & Screensavers", kind: "effect", details: "A decorative gradient fills the screen. Use it as a background or a simple visual test." },
+
+  { slug: "fake-windows-10-update", title: "Fake Windows 10 Update", description: "A fictional update-screen simulation for entertainment.", category: "Fake Screens", kind: "simulation", details: "This is a fictional visual simulation, not a real operating-system update. Do not use it to mislead someone about a real system status." },
+  { slug: "fake-windows-11-update", title: "Fake Windows 11 Update", description: "A fictional update-screen simulation inspired by desktop update screens.", category: "Fake Screens", kind: "simulation", details: "This is a clearly labelled simulation for entertainment and demos. It does not update, lock, or modify your computer." },
+  { slug: "fake-mac-update", title: "Fake Mac Update", description: "A fictional desktop update animation.", category: "Fake Screens", kind: "simulation", details: "A generic fictional update-style screen for entertainment. It is not an actual operating-system update and is not affiliated with Apple." },
+  { slug: "fake-android-update", title: "Fake Android Update", description: "A fictional mobile update-style animation.", category: "Fake Screens", kind: "simulation", details: "This is a visual simulation only. It does not update your phone or change any device settings." },
+  { slug: "fake-windows-xp-update", title: "Fake Classic Update", description: "A fictional retro update-screen simulation.", category: "Fake Screens", kind: "simulation", details: "A retro-inspired fictional update screen for entertainment. It does not perform a real update." },
+  { slug: "fake-windows-xp-boot", title: "Fake Retro Boot Screen", description: "A nostalgic computer-startup style simulation.", category: "Fake Screens", kind: "simulation", details: "This is a retro-inspired boot animation and does not interact with your computer's startup process." },
+  { slug: "fake-chrome-os-update", title: "Fake Chromebook Update", description: "A fictional update-style screen for demos.", category: "Fake Screens", kind: "simulation", details: "This is a fictional update simulation, not a real ChromeOS update and not affiliated with Google." },
+  { slug: "fake-ubuntu-update", title: "Fake Linux Update", description: "A fictional terminal-style progress screen.", category: "Fake Screens", kind: "simulation", details: "This decorative terminal-inspired simulation does not run commands, install software, or modify your system." },
+  { slug: "fake-video-call", title: "Fake Video Call", description: "A fictional video-call layout for presentations and demos.", category: "Fake Screens", kind: "simulation", details: "This is a simulated call interface. It does not connect to a real person, use your camera, or transmit audio." },
+  { slug: "fake-zoom-call", title: "Fake Meeting Screen", description: "A fictional online meeting interface for demos.", category: "Fake Screens", kind: "simulation", details: "This is a generic simulated meeting interface, not a real meeting service and not affiliated with any provider." },
+  { slug: "fake-teams-call", title: "Fake Team Call", description: "A fictional team-call interface.", category: "Fake Screens", kind: "simulation", details: "A generic mock call screen for demonstrations. It does not connect to a real service or person." },
+  { slug: "fake-slack-huddle", title: "Fake Audio Huddle", description: "A fictional audio-huddle interface.", category: "Fake Screens", kind: "simulation", details: "A generic simulated huddle screen for entertainment. It does not connect to a messaging platform." }
 ];
-export const getTool = (slug: string) => tools.find(t => t.slug === slug);
-export const categoryOrder = ["Screen Tests","Effects","Fake Screens","Guides"];
+
+export const tools = rawTools;
+export const toolBySlug = Object.fromEntries(rawTools.map((tool) => [tool.slug, tool])) as Record<string, Tool>;
+export const categories: ToolCategory[] = ["Screen Tests", "Effects & Screensavers", "Timers & Utilities", "Fake Screens"];
+
+export function getRelatedTools(current: Tool, limit = 4) {
+  return tools.filter((tool) => tool.slug !== current.slug && tool.category === current.category).slice(0, limit);
+}

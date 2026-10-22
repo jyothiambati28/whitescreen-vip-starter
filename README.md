@@ -1,10 +1,23 @@
-# WhiteScreen.vip starter
+# ScreenTools — complete starter website
 
-A Next.js App Router starter for browser-based colour screens, display tests, effects, timers, fake-screen simulations and guide pages.
+A Next.js App Router website containing a homepage, a data-driven library of screen tools, screen colour tests, a countdown timer, stopwatch, visual effects, fictional simulation pages, SEO metadata, sitemap, robots rules, and policy pages.
+
+## Included
+
+- Responsive homepage with categories and tool links.
+- 50+ individual tool routes generated from `lib/tools.ts`.
+- Solid colour screens and a downloadable 1920 × 1080 white/selected-colour PNG.
+- Fullscreen controls.
+- Countdown timer with presets, custom duration, pause, reset, and fullscreen.
+- Stopwatch with start, pause, reset, and lap controls.
+- Animated visual effects and clearly labelled fictional simulation pages.
+- Per-tool title, description, canonical URL, and Open Graph metadata.
+- Sitemap and robots routes.
+- Reduced-motion CSS support.
 
 ## Run locally
 
-Requires Node.js 20.9+.
+Use Node.js 20 or newer.
 
 ```bash
 npm install
@@ -13,24 +26,34 @@ npm run dev
 
 Open http://localhost:3000.
 
-## Build
+To check a production build:
 
 ```bash
 npm run build
-npm start
 ```
 
-## Deploy to Vercel
+## Deploy with GitHub and Vercel
 
-1. Push this project to your GitHub repository.
-2. In Vercel, choose **Add New → Project** and import the repository.
-3. Framework preset: Next.js. Build command: `npm run build`.
-4. Deploy and open the generated `vercel.app` URL.
+1. Download and extract this project.
+2. Upload the extracted files and folders to your existing GitHub repository, preserving the folder structure. Replace matching starter files when prompted.
+3. Commit the changes to the `main` branch.
+4. Vercel should deploy the commit automatically.
+5. Open the Vercel deployment and check several routes.
 
-## Notes
+## Important before public launch
 
-- Tool pages are generated from `lib/tools.ts` and `app/[slug]/page.tsx`.
-- Update the `metadataBase` and sitemap URLs in `app/layout.tsx`, `app/sitemap.ts`, and `app/robots.ts` after selecting your real domain.
-- Dead-pixel and display test tools only show patterns for visual inspection; they do not automatically diagnose hardware.
-- Fake screens are clearly marked as simulations.
-- This is a generated starter. Test every route and browser interaction before production use.
+- Update `metadataBase`, the sitemap base URL, and robots sitemap URL in `app/layout.tsx`, `app/sitemap.ts`, and `app/robots.ts` if you connect a custom domain.
+- Review and customize policy pages to match the services actually used.
+- The contact page is informational only; it does not submit a form.
+- Screen tests are visual aids and do not automatically detect dead pixels, diagnose burn-in, or measure calibrated display properties.
+- Fake screens are fictional visual simulations and must not be represented as real updates or calls.
+- This is an original implementation inspired by the general category of browser-based screen tools, not a copy of another site's source code or branding.
+
+## Project structure
+
+- `app/page.tsx` — homepage
+- `app/[slug]/page.tsx` — individual tool pages and metadata
+- `app/globals.css` — responsive design and visual effects
+- `components/tool-experience.tsx` — interactive client-side tool UI
+- `lib/tools.ts` — central tool registry
+- `app/sitemap.ts` and `app/robots.ts` — crawl guidance
